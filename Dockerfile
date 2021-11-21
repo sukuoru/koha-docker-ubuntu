@@ -16,8 +16,9 @@ RUN sed -i -e 's/DOMAIN=.*/DOMAIN=".mydomain.org"/g' /etc/koha/koha-sites.conf
 RUN sed -i -e 's/INTRASUFFIX=.*/INTRASUFFIX="-admin"/g' /etc/koha/koha-sites.conf
 RUN sed -i -e 's/OPACSUFFIX=.*/OPACSUFFIX="-opac"/g' /etc/koha/koha-sites.conf
 RUN sed -i -e 's/INTRAPORT="80"/INTRAPORT="8080"/g' /etc/koha/koha-sites.conf
-RUN sed -i -e 's/OPACPORT=""/OPACPORT="8081"/g' /etc/koha/koha-sites.conf
+RUN sed -i -e 's/OPACPORT=.*/OPACPORT="8081"/g' /etc/koha/koha-sites.conf
 
+RUN echo "LISTEN 8080" >> /etc/apache2/ports.conf && echo "LISTEN 8081" >> /etc/apache2/ports.conf
 
 RUN a2enmod rewrite && a2enmod cgi && a2enmod deflate
 
