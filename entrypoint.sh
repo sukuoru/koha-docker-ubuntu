@@ -12,6 +12,13 @@ if [ ! -z "$LOCAL_MYSQL" ] && [ "$LOCAL_MYSQL" == "true" ];then
     su - mysql -s /bin/bash -c "/usr/sbin/mysqld --basedir=/usr --datadir=/var/lib/mysql --plugin-dir=/usr/lib/x86_64-linux-gnu/mariadb19/plugin --user=mysql --skip-log-error --pid-file=/run/mysqld/mysqld.pid --socket=/var/run/mysqld/mysqld.sock" &
 fi
 
+if [ ! -z "$MYSQL_HOST"] &&
+    [ ! -z "$MYSQL_USER" ] &&
+    [ ! -z "$MYSQL_PASS" ] &&
+    [ ! -z "$MYSQL_PORT" ];then
+    sed -i -e "s///g" /etc/koha/koha-sites.conf
+fi
+
 koha-create --create-db library
 
 /usr/sbin/apachectl  -D FOREGROUND -k start
