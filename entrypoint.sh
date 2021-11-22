@@ -36,8 +36,11 @@ fi
 sed -i -e 's/service apache2 restart/#service apache2 restart/g' /usr/sbin/koha-create
 
 koha-create --create-db library
+
+if [ ! -z "$INSTALL_LANG" ];then
 # Ignore the memcached error
-koha-translate --install tr-TR || true
+    koha-translate --install $INSTALL_LANG || true
+fi
 
 sed -i -e 's|ErrorLog.*|ErrorLog /dev/stderr|g' /etc/apache2/sites-enabled/library.conf
 /usr/sbin/apachectl  -D FOREGROUND -k start
