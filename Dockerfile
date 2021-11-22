@@ -22,7 +22,6 @@ RUN echo "LISTEN 8080" >> /etc/apache2/ports.conf && echo "LISTEN 8081" >> /etc/
 
 RUN a2enmod rewrite && a2enmod cgi && a2enmod deflate
 
-RUN apt-get clean
-
 COPY entrypoint.sh /opt/
+COPY getpassword.sh /opt/
 ENTRYPOINT /opt/entrypoint.sh
