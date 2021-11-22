@@ -24,4 +24,8 @@ RUN a2enmod rewrite && a2enmod cgi && a2enmod deflate
 
 COPY entrypoint.sh /opt/
 COPY getpassword.sh /opt/
+
+# Deb post install creates the db files
+RUN rm -rf /var/lib/mysql/*
+
 ENTRYPOINT /opt/entrypoint.sh

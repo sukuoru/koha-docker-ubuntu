@@ -11,6 +11,9 @@ chown mysql:mysql /var/run/mysqld
 if [ ! -z "$REMOTE_DB" ] && [ "$REMOTE_DB" == "true" ];then
     echo
 else
+    if [ ! -d "/var/lib/mysql/mysql" ];then
+        mysql_install_db
+    fi
     su - mysql -s /bin/bash -c "/usr/sbin/mysqld --basedir=/usr --datadir=/var/lib/mysql --plugin-dir=/usr/lib/x86_64-linux-gnu/mariadb19/plugin --user=mysql --skip-log-error --pid-file=/run/mysqld/mysqld.pid --socket=/var/run/mysqld/mysqld.sock" &
 fi
 
