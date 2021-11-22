@@ -3,7 +3,7 @@ This is an attempt to make a koha docker image for those who don't want to insta
 
 Start the container by:
 
-* docker run -v MYLOCALDIR:/var/lib/mysql -e INSTALL_LANG="tr_TR" -p 8081:8081 -p 8080:8080 -d --name koha --cap-add=SYS_NICE --cap-add=DAC_READ_SEARCH ghcr.io/aldemira/koha-docker:main
+* docker run -v MYLOCALDIR:/var/lib/mysql -e INSTALL_LANG="tr-TR" -p 8081:8081 -p 8080:8080 -d --name koha --cap-add=SYS_NICE --cap-add=DAC_READ_SEARCH ghcr.io/aldemira/koha-docker:main
 
 Get get the UI password
 
