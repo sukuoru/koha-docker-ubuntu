@@ -38,11 +38,14 @@ fi
 # Dockerize koha-create aka don't start apache from it
 sed -i -e 's/service apache2 restart/#service apache2 restart/g' /usr/sbin/koha-create
 
-koha-create --create-db library
+koha_db_present=$(echo "show databases" | mysql | grep koha_library)
+if [ "$koha_db_present" == "" ];then
+    koha-create --create-db library
 
-if [ ! -z "$INSTALL_LANG" ];then
-# Ignore the memcached error
-    koha-translate --install $INSTALL_LANG || true
+    if [ ! -z "$INSTALL_LANG" ];then
+        # Ignore the memcached error
+        koha-translate --install $INSTALL_LANG || true
+    fi
 fi
 
 sed -i -e 's|ErrorLog.*|ErrorLog /dev/stderr|g' /etc/apache2/sites-enabled/library.conf
