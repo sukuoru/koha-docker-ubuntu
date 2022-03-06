@@ -9,8 +9,10 @@ chown mysql:mysql /var/run/mysqld
 /usr/sbin/cron &
 
 if [ ! -z "$REMOTE_DB" ] && [ "$REMOTE_DB" == "true" ];then
+    # TODO
     echo
 else
+    echo 'Starting mysql db...'
     if [ ! -d "/var/lib/mysql/mysql" ];then
         mysql_install_db
     fi
@@ -32,20 +34,26 @@ if [ ! -z "$NO_MEMCACHED"  ] && [ "$NO_MEMCACHED" == "true" ];then
     sed -i -e 's/USE_MEMCACHED="yes"/USE_MEMCACHED="no"/g' /etc/koha/koha-sites.conf
     sed -i -e 's/MEMCACHED_SERVERS=.*/MEMCACHED_SERVERS=""/g' /etc/koha/koha-sites.conf
 else
+    echo 'Starting memcache...'
     memcached -u memcache -d
 fi
 
-# Dockerize koha-create aka don't start apache from it
-sed -i -e 's/service apache2 restart/#service apache2 restart/g' /usr/sbin/koha-create
 
-koha_db_present=$(echo "show databases" | mysql | grep koha_library)
+# Grep exits with 1 when not found
+koha_db_present=$(echo "show databases" | mysql | grep koha_library || true)
 if [ "$koha_db_present" == "" ];then
+    echo "Creating koha library..."
     koha-create --create-db library
 
     if [ ! -z "$INSTALL_LANG" ];then
         # Ignore the memcached error
+	echo "Creating translations...."
         koha-translate --install $INSTALL_LANG || true
     fi
+    cp -f /etc/apache2/sites-available/library.conf /opt/kohafilestore/library.conf
+else
+    cp /opt/kohafilestore/library.conf /etc/apache2/sites-available
+    ln -sf /etc/apache2/sites-available/library.conf /etc/apache2/sites-enabled/library.conf
 fi
 
 sed -i -e 's|ErrorLog.*|ErrorLog /dev/stderr|g' /etc/apache2/sites-enabled/library.conf
