@@ -21,9 +21,10 @@ RUN sed -i -e 's/OPACPORT=.*/OPACPORT="8081"/g' /etc/koha/koha-sites.conf
 # Koha-create doesn't have to do everything all by itself!
 RUN sed -i -e 's/die "User/echo/' /usr/sbin/koha-create
 RUN sed -i -e 's/die "Group/echo/' /usr/sbin/koha-create
-RUN sed -i -e 's/service apache2 restart/#service apache2 restart/g' /usr/sbin/koha-create
 RUN sed -i -e '/if getent.*/,+3d' /usr/sbin/koha-create
 RUN sed -i -e '/adduser.*/,+3d' /usr/sbin/koha-create
+RUN sed -i -e '/generate_config_file $APACHE_CONFIGFILE/,+1d' /usr/sbin/koha-create
+RUN sed -i -e '/# Reconfigure Apache./,+7d' /usr/sbin/koha-create
 
 RUN echo "LISTEN 8080" >> /etc/apache2/ports.conf && echo "LISTEN 8081" >> /etc/apache2/ports.conf
 
@@ -35,7 +36,8 @@ COPY getpassword.sh /opt/
 # Deb post install creates the db files
 RUN rm -rf /var/lib/mysql/*
 # Create a directory to store stateful files
-RUN mkdir -p /opt/kohafilestore
+COPY library.conf /etc/apache2/sites-available
+RUN ln -s /etc/apache2/sites-available/library.conf /etc/apache2/sites-enabled/library.conf
 
 # Create koha user manualy and only during docker build
 RUN adduser --no-create-home --disabled-login \
