@@ -50,10 +50,6 @@ if [ "$koha_db_present" == "" ];then
 	echo "Creating translations...."
         koha-translate --install $INSTALL_LANG || true
     fi
-    sed -i -e 's|ErrorLog.*|ErrorLog /dev/stderr|g' /etc/apache2/sites-enabled/library.conf
-else
-    cp /opt/kohafilestore/library.conf /etc/apache2/sites-available
-    ln -sf /etc/apache2/sites-available/library.conf /etc/apache2/sites-enabled/library.conf
 fi
 
 /usr/sbin/apachectl  -D FOREGROUND -k start
