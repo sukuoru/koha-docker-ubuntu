@@ -1,9 +1,11 @@
-# koha-docker
+# koha-docker-ubuntu
 This is an attempt to make a koha docker image for those who don't want to install gazillions of perl modules in their servers.
 
 Start the container by:
 
-* docker run --restart=always -e NO_MEMCACHED=true -v MYLOCALDIR:/var/lib/mysql -e INSTALL_LANG="tr-TR" -p 8081:8081 -p 8080:8080 -d --name koha --cap-add=SYS_NICE --cap-add=DAC_READ_SEARCH ghcr.io/aldemira/koha-docker:main
+* docker compose up
+
+You will get an error from the container, regarding permissions for mariadb. That is when you need to run the chown at the bottom.
 
 Get get the UI password
 
