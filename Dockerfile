@@ -1,8 +1,8 @@
-FROM debian:bullseye
-MAINTAINER Aldemir Akpinar <aldemir.akpinar@gmail.com>
+FROM ubuntu:22.04
+#AUTHOR Forked from Aldemir Akpinar <aldemir.akpinar@gmail.com>
 
-ENV DEBIAN_FRONTEND=noninteractive
-RUN sed -i -e's/ main/ main contrib non-free/g' /etc/apt/sources.list
+ARG DEBIAN_FRONTEND=noninteractive
+#RUN sed -i -e's/ main/ main contrib non-free/g' /etc/apt/sources.list
 
 RUN apt-get update && apt-get install -y tzdata mariadb-client gnupg curl mariadb-server memcached
 

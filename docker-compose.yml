@@ -1,0 +1,21 @@
+name: koha
+services:
+    koha-docker:
+        restart: always
+        environment:
+            - NO_MEMCACHED=false
+            - INSTALL_LANG=tr-TR
+        volumes:
+            - ./local:/var/lib/mysql
+        ports:
+            - 3026:8081
+            - 3025:8080
+        container_name: koha
+        cap_add:
+            - SYS_NICE
+            - DAC_READ_SEARCH
+        build: .
+volumes:
+    MYLOCALDIR:
+        external: true
+        name: MYLOCALDIR
