@@ -3,7 +3,11 @@ This is an attempt to make a koha docker image for those who don't want to insta
 
 Start the container by:
 
-* docker compose up
+*  git clone https://github.com/sukuoru/koha-docker-ubuntu
+*  cd koha-docker-ubuntu
+*  docker compose up
+*  after permission error:
+*  sudo chown 101:101 -R local
 
 You will get an error from the container, regarding permissions for mariadb. That is when you need to run the chown at the bottom.
 
