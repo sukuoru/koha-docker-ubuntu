@@ -1,12 +1,33 @@
 name: koha
 services:
+    koha-db:
+        image: mariadb
+        restart: always
+        environment:
+            - PUID=1000
+            - PGID=1000
+            - MYSQL_ROOT_PASSWORD=koha
+            - MYSQL_DATABASE=koha_library
+            - MYSQL_USER=koha_library
+            - MYSQL_PASSWORD=koha
+        volumes:
+            - ./mariadb:/var/lib/mysql
+
     koha-docker:
         restart: always
         environment:
+            - PUID=1000
+            - PGID=1000
             - NO_MEMCACHED=false
-            - INSTALL_LANG=tr-TR
-        volumes:
-            - ./local:/var/lib/mysql
+            - DB_HOST=koha-db
+            - DB_PORT=3306
+#            - MYSQL_DATABASE=koha_library
+            - MYSQL_USER=koha_library
+            - MYSQL_PASSWORD=koha
+            - DB_ROOT_PASSWORD=koha
+            - SLEEP=10
+            - TIMEZONE=America/New_York
+#            - INSTALL_LANG=tr-TR
         ports:
             - 3026:8081
             - 3025:8080
@@ -16,6 +37,4 @@ services:
             - DAC_READ_SEARCH
         build: .
 volumes:
-    MYLOCALDIR:
-        external: true
-        name: MYLOCALDIR
+  koha-db:
